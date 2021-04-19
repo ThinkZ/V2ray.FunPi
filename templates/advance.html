@@ -409,6 +409,7 @@
         }
 
         // auto detect
+        $("#enable_auto_switch").prop('checked', g_config_local['auto_detect']['enabled']);
         var detect_url = g_config_local['auto_detect']['detect_url'];
         $("#detect_url").val(detect_url);
 

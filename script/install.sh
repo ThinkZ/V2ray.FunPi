@@ -45,9 +45,9 @@ EOF
 
 # install v2ray
 echo "3: 安装V2Ray"
-mkdir -p /etc/v2ray/
-touch /etc/v2ray/config.json
-chmod 644 /etc/v2ray/config.json
+mkdir -p /usr/local/etc/v2ray/
+touch /usr/local/etc/v2ray/config.json
+chmod 644 /usr/local/etc/v2ray/config.json
 mkdir -p /var/log/v2ray/
 bash update_v2ray.sh
 

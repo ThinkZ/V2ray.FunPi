@@ -79,7 +79,7 @@ WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
-systemctl disable v2ray_iptable.service
+systemctl enable v2ray_iptable.service
 
 # 
 chmod +x /etc/rc.local

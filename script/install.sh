@@ -49,7 +49,8 @@ mkdir -p /usr/local/etc/v2ray/
 touch /usr/local/etc/v2ray/config.json
 chmod 644 /usr/local/etc/v2ray/config.json
 mkdir -p /var/log/v2ray/
-bash update_v2ray.sh
+bash curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh
+
 
 #configure Supervisor
 echo "4: 设置supervisor和附属v2pi服务"

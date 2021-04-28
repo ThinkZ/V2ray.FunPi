@@ -11,7 +11,7 @@ class AppConfig(BaseDataItem):
     def __init__(self):
         self.user = "admin"
         self.password = "admin"
-        self.port = 1086
+        self.port = 80
         self.inited = False
 
     def load(self):

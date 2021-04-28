@@ -5,6 +5,19 @@ export PATH
 #check Root
 [ $(id -u) != "0" ] && { echo "${CFAILURE}Error: You must be root to run this script${CEND}"; exit 1; }
 
+
+# 开启ssh服务
+echo "1: 开启ssh服务"
+sed -i '' 's/#Port /Port /g' /etc/ssh/sshd_config
+sed -i '' 's/#AddressFamily /AddressFamily /g' /etc/ssh/sshd_config
+sed -i '' 's/#ListenAddress /ListenAddress /g' /etc/ssh/sshd_config
+sed -i '' 's/#PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config
+sed -i '' 's/#PasswordAuthentication .*/PasswordAuthentication yes /g' /etc/ssh/sshd_config
+systemctl start ssh
+
+
+
+echo "2: 下载和更新依赖库"
 #install Needed Packages
 apt-get update -y
 apt-get install wget curl socat git python3 python3-setuptools python3-dev python3-pip openssl libssl-dev ca-certificates supervisor -y
@@ -31,6 +44,7 @@ exit 0
 EOF
 
 # install v2ray
+echo "3: 安装V2Ray"
 mkdir -p /etc/v2ray/
 touch /etc/v2ray/config.json
 chmod 644 /etc/v2ray/config.json
@@ -38,6 +52,7 @@ mkdir -p /var/log/v2ray/
 bash update_v2ray.sh
 
 #configure Supervisor
+echo "4: 设置supervisor和附属v2pi服务"
 mkdir /etc/supervisor
 mkdir /etc/supervisor/conf.d
 echo_supervisord_conf > /etc/supervisor/supervisord.conf
@@ -62,6 +77,7 @@ supervisord -c /etc/supervisor/supervisord.conf
 supervisorctl restart v2pi
 
 # ip table
+echo "5: 设置系统TPROXY服务:v2iptable.service"
 echo net.ipv4.ip_forward=1 >> /etc/sysctl.conf && sysctl -p
 cat>/etc/systemd/system/v2iptable.service<<-EOF
 [Unit]
@@ -80,7 +96,7 @@ EOF
 
 
 systemctl daemon-reload
-systemctl enable v2iptable.service
+systemctl disable v2iptable.service
 
 # 
 chmod +x /etc/rc.local
@@ -88,12 +104,5 @@ systemctl start rc-local
 systemctl status rc-local
 
 
-# 开启ssh服务
-sed -i '' 's/#Port /Port /g' /etc/ssh/sshd_config
-sed -i '' 's/#AddressFamily /AddressFamily /g' /etc/ssh/sshd_config
-sed -i '' 's/#ListenAddress /ListenAddress /g' /etc/ssh/sshd_config
-sed -i '' 's/#PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config
-sed -i '' 's/#PasswordAuthentication .*/PasswordAuthentication yes /g' /etc/ssh/sshd_config
-systemctl start ssh
 
 echo "install success"

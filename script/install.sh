@@ -78,6 +78,7 @@ ExecStart=/bin/bash /usr/local/V2ray.Fun/script/config_iptable.sh
 WantedBy=multi-user.target
 EOF
 
+
 systemctl daemon-reload
 systemctl enable v2ray_iptable.service
 
@@ -85,5 +86,14 @@ systemctl enable v2ray_iptable.service
 chmod +x /etc/rc.local
 systemctl start rc-local
 systemctl status rc-local
+
+
+# 开启ssh服务
+sed -i '' 's/#Port /Port /g' /etc/ssh/sshd_config
+sed -i '' 's/#AddressFamily /AddressFamily /g' /etc/ssh/sshd_config
+sed -i '' 's/#ListenAddress /ListenAddress /g' /etc/ssh/sshd_config
+sed -i '' 's/#PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config
+sed -i '' 's/#PasswordAuthentication .*/PasswordAuthentication yes /g' /etc/ssh/sshd_config
+systemctl start ssh
 
 echo "install success"

@@ -45,11 +45,11 @@ cat>>/etc/supervisor/supervisord.conf<<EOF
 [include]
 files = /etc/supervisor/conf.d/*.ini
 EOF
-touch /etc/supervisor/conf.d/v2ray.fun.ini
-cat>/etc/supervisor/conf.d/v2ray.fun.ini<<-EOF
-[program:v2ray.fun]
-command=/usr/local/V2ray.Fun/script/start.sh run
-stdout_logfile=/var/log/v2ray.fun
+touch /etc/supervisor/conf.d/v2pi.ini
+cat>/etc/supervisor/conf.d/v2pi.ini<<-EOF
+[program:v2pi]
+command=/usr/local/v2pi/script/start.sh run
+stdout_logfile=/var/log/v2pi
 autostart=true
 autorestart=true
 startsecs=5
@@ -59,11 +59,11 @@ killasgroup=true
 EOF
 
 supervisord -c /etc/supervisor/supervisord.conf
-supervisorctl restart v2ray.fun
+supervisorctl restart v2pi
 
 # ip table
 echo net.ipv4.ip_forward=1 >> /etc/sysctl.conf && sysctl -p
-cat>/etc/systemd/system/v2ray_iptable.service<<-EOF
+cat>/etc/systemd/system/v2iptable.service<<-EOF
 [Unit]
 Description=Tproxy rule
 After=network-online.target
@@ -72,7 +72,7 @@ Wants=network-online.target
 [Service]
 
 Type=oneshot
-ExecStart=/bin/bash /usr/local/V2ray.Fun/script/config_iptable.sh
+ExecStart=/bin/bash /usr/local/v2pi/script/config_iptable.sh
 
 [Install]
 WantedBy=multi-user.target
@@ -80,7 +80,7 @@ EOF
 
 
 systemctl daemon-reload
-systemctl enable v2ray_iptable.service
+systemctl enable v2iptable.service
 
 # 
 chmod +x /etc/rc.local

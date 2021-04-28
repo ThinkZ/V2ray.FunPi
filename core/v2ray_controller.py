@@ -85,7 +85,7 @@ class V2rayController:
 
     def enable_iptables(self):
         subprocess.check_output("bash ./script/config_iptable.sh", shell=True)
-        subprocess.check_output("systemctl enable v2ray_iptable.service", shell=True)
+        subprocess.check_output("systemctl enable v2iptable.service", shell=True)
 
 class DockerV2rayController(V2rayController):
     def start(self) -> bool:

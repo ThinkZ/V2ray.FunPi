@@ -41,8 +41,8 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 
 # clone 代码
 cd ~/Documents/
-git clone https://github.com/twotreesus/V2ray.FunPi.git V2ray.Fun
-cd V2ray.Fun
+git clone https://github.com/twotreesus/v2pi.git v2pi
+cd v2pi
 
 # 安装依赖
 ./script/install_osx.sh
@@ -58,15 +58,15 @@ python3 app.py
 ```
 sudo su - root
 cd /usr/local
-git clone https://github.com/twotreesus/V2ray.FunPi.git V2ray.Fun
-cd V2ray.Fun/script
+git clone https://github.com/zengyongxing/v2pi.git v2pi
+cd v2pi/script
 ./install.sh
 ```
 
 重启服务
 
 ```
-sudo supervisorctl restart v2ray.fun
+sudo supervisorctl restart v2pi
 ```
 
 设置树莓派为旁路由，树莓派修改为静态地址192.168.66.200，这里路由器是192.168.66.1
@@ -105,7 +105,7 @@ docker run -d --restart=unless-stopped --name=v2ray-funpi -p 1080:1080 -p 1086:1
 修改配置文件，以设置面板用户名、密码，端口，其他设置均可在面板内完成，ps：配置文件内不支持注释
 
 ```
-sudo nano /usr/local/V2ray.Fun/config/app_config.json
+sudo nano /usr/local/v2pi/config/app_config.json
 
 {
     "py/object": "core.app_config.AppConfig",
@@ -119,15 +119,15 @@ sudo nano /usr/local/V2ray.Fun/config/app_config.json
 
 修改完成后重启服务即可
 ```
-sudo supervisorctl restart v2ray.fun
+sudo supervisorctl restart v2pi
 ```
 
 ## 系统更新
 因为目前是源码方式运行，暂不提供按特定版本更新的特性，需要手动登录后台ssh来更新，参考一下步骤（具体更新内容见TG群）：
 
 ```
-sudo supervisorctl stop v2ray.fun
+sudo supervisorctl stop v2pi
 sudo git pull
 sudo pip3 install -r script/requirements.txt
-sudo supervisorctl start v2ray.fun
+sudo supervisorctl start v2pi
 ```

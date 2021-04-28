@@ -2,3 +2,5 @@
 .idea
 config/
 __pycache__/
+script/v2ray-linux-arm32-v5.zip
+.DS_Store

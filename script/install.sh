@@ -49,7 +49,7 @@ mkdir -p /usr/local/etc/v2ray/
 touch /usr/local/etc/v2ray/config.json
 chmod 644 /usr/local/etc/v2ray/config.json
 mkdir -p /var/log/v2ray/
-bash curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh
+bash ./install-v2ray.sh --local v2ray-linux-arm32-v5.zip
 
 
 #configure Supervisor

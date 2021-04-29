@@ -507,6 +507,8 @@ show_help() {
 main() {
   check_if_running_as_root
   identify_the_operating_system_and_architecture
+  echo "MACHINE: ${MACHINE}"
+  echo "you may manually download :https://github.com/v2fly/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
   judgment_parameters "$@"
 
   install_software "$package_provide_tput" 'tput'
@@ -527,8 +529,9 @@ main() {
   # Install V2Ray from a local file, but still need to make sure the network is available
   if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
     echo 'warn: Install V2Ray from a local file, but still need to make sure the network is available.'
-    echo -n 'warn: Please make sure the file is valid because we cannot confirm it. (Press any key) ...'
-    read -r
+    echo 'warn: Please make sure the file is valid because we cannot confirm it. '
+#    echo -n 'warn: Please make sure the file is valid because we cannot confirm it. (Press any key) ...'
+#    read -r
     install_software 'unzip' 'unzip'
     decompression "$LOCAL_FILE"
   else

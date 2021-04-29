@@ -13,7 +13,9 @@ sed -i '' 's/#AddressFamily /AddressFamily /g' /etc/ssh/sshd_config
 sed -i '' 's/#ListenAddress /ListenAddress /g' /etc/ssh/sshd_config
 sed -i '' 's/#PermitRootLogin.*/PermitRootLogin yes/g' /etc/ssh/sshd_config
 sed -i '' 's/#PasswordAuthentication .*/PasswordAuthentication yes /g' /etc/ssh/sshd_config
+systemctl enable ssh
 systemctl start ssh
+
 
 
 
@@ -50,6 +52,8 @@ touch /usr/local/etc/v2ray/config.json
 chmod 644 /usr/local/etc/v2ray/config.json
 mkdir -p /var/log/v2ray/
 bash ./install-v2ray.sh --local v2ray-linux-arm32-v5.zip
+systmectl enable v2ray
+systmectl start v2ray
 
 
 #configure Supervisor

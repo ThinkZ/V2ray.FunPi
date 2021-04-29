@@ -51,9 +51,10 @@ mkdir -p /usr/local/etc/v2ray/
 touch /usr/local/etc/v2ray/config.json
 chmod 644 /usr/local/etc/v2ray/config.json
 mkdir -p /var/log/v2ray/
-bash ./install-v2ray.sh --local v2ray-linux-arm32-v5.zip
-systmectl enable v2ray
-systmectl start v2ray
+chmod 777 var/log/v2ray/
+bash ./install-release.sh --local v2ray-linux-arm32-v7a.zip
+systemctl enable v2ray
+systemctl start v2ray
 
 
 #configure Supervisor

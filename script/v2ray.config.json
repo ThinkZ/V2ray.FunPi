@@ -1,4 +1,9 @@
 {
+  "log": {
+    "error": "",
+    "loglevel": "info",
+    "access": ""
+  },
   "inbounds": [
     {
       "tag":"transparent",
@@ -55,6 +60,17 @@
         ]
       },
       "streamSettings": {
+        "wsSettings": {
+          "path": "",
+          "headers": {
+            "host": ""
+          }
+        },
+        "tlsSettings": {
+          "allowInsecure": true
+        },
+        "security": "tls",
+        "network": "ws",
         "sockopt": {
           "mark": 255
         }

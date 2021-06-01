@@ -60,7 +60,7 @@ class V2RayUserConfig(BaseDataItem):
                     return self.default_remote
         class AutoDetectAndSwitch:
             def __init__(self):
-                self.enabled = False
+                self.enabled = True
                 self.detect_span = 60
                 self.detect_url = 'https://google.com/'
                 self.failed_count = 3

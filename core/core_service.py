@@ -231,6 +231,8 @@ class CoreService:
             endtime = time.time()
             print(endtime-starttime)
             print('detected connetion success, nothing to do, just return')
+            detect.last_switch_time = '{0} ---- {1}'.format(datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'), '无需切换')
+            cls.user_config.save()
             return
         except Exception as e:
             print('detected connetion failed, detail:\n{0}'.format(e))
@@ -245,7 +247,6 @@ class CoreService:
                 def __lt__(self, other):
                     return self.ping < other.ping
 
-            print(ping_groups)
             ping_results = []
             for group in ping_groups:
                 group_key = group[K.subscribe]
@@ -258,9 +259,12 @@ class CoreService:
             
             ping_results.sort()
             if len(ping_results) > 0:
-                best_node = ping_results[0]
+                best_node = random.choice(ping_results) # 随机抽一个
                 node_index = cls.node_manager.find_node_index(best_node.group_key, best_node.node_ps)
                 cls.apply_node(best_node.group_key, node_index, restart_auto_detect=False)
                 detect.last_switch_time = '{0} ---- {1}'.format(datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'), best_node.node_ps)
+                cls.user_config.save()
+            else:
+                detect.last_switch_time = '{0} ---- {1}'.format(datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'), '无节点')
                 cls.user_config.save()
     

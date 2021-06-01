@@ -13,10 +13,11 @@ from typing import List
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.base import *
 import requests
-from urllib3.util.retry import Retry
 from requests.adapters import HTTPAdapter
 import random
 import time
+import socket
+import socks
 
 from .app_config import AppConfig
 from .v2ray_controller import V2rayController, make_controller
@@ -198,65 +199,68 @@ class CoreService:
         job = cls.scheduler.get_job(K.auto_detect)
         if job:
             job.remove()
-
+    
     @classmethod
     def auto_detect_job(cls):
         detect:V2RayUserConfig.AdvanceConfig.AutoDetectAndSwitch = cls.user_config.advance_config.auto_detect
-
-        DEFAULT_TIMEOUT = 5 # seconds
-        class TimeoutHTTPAdapter(HTTPAdapter):
-            def __init__(self, *args, **kwargs):
-                self.timeout = DEFAULT_TIMEOUT
-                if "timeout" in kwargs:
-                    self.timeout = kwargs["timeout"]
-                    del kwargs["timeout"]
-                super().__init__(*args, **kwargs)
-
-            def send(self, request, **kwargs):
-                timeout = kwargs.get("timeout")
-                if timeout is None:
-                    kwargs["timeout"] = self.timeout
-                return super().send(request, **kwargs)
-
-        # begin detect
-        retries = Retry(total=detect.failed_count, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504])
-        http = requests.Session()
-        http.mount("https://", TimeoutHTTPAdapter(max_retries=retries, timeout=detect.timeout))
-
+        socks_port = cls.user_config.advance_config.inbound.socks_port()
         try:
-            http.get(detect.detect_url)
+            starttime = time.time()
+            SOCKS5_PROXY_HOST = '127.0.0.1'		 # socks 代理IP地址
+            SOCKS5_PROXY_PORT = socks_port           # socks 代理本地端口
+            default_socket = socket.socket
+            socks.set_default_proxy(socks.SOCKS5, SOCKS5_PROXY_HOST, SOCKS5_PROXY_PORT)
+            socket.socket = socks.socksocket
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) Gecko/20100101 Firefox/62.0",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2"
+            }
+            session = requests.session()
+            session.keep_alive = False
+            session.mount('http://',HTTPAdapter(max_retries=detect.failed_count))#设置重试次数
+            session.mount('https://',HTTPAdapter(max_retries=detect.failed_count))
+            resp=session.get(detect.detect_url,headers=headers,timeout=detect.timeout)
+            html_source=resp.text        
+            resp.close()
+            if html_source: 
+                print('ok')
+            else: 
+                print('fail')
+            endtime = time.time()
+            print(endtime-starttime)
             print('detected connetion success, nothing to do, just return')
             return
         except Exception as e:
             print('detected connetion failed, detail:\n{0}'.format(e))
+            ping_groups = cls.node_manager.ping_test_all()
 
-        # failed prepare to switch node
-        ping_groups = cls.node_manager.ping_test_all()
-        class NodePingInfo:
-            def __init__(self, group_key:str, node_ps:str, ping:int):
-                self.group_key:str = group_key
-                self.node_ps:str = node_ps
-                self.ping:int = ping
+            class NodePingInfo:
+                def __init__(self, group_key:str, node_ps:str, ping:int):
+                    self.group_key:str = group_key
+                    self.node_ps:str = node_ps
+                    self.ping:int = ping
 
-            def __lt__(self, other):
-                return self.ping < other.ping
+                def __lt__(self, other):
+                    return self.ping < other.ping
 
-        ping_results = []
-        for group in ping_groups:
-            group_key = group[K.subscribe]
-            nodes = group[K.nodes]
-            for node_ps in nodes.keys():
-                ping = nodes[node_ps]
-                info = NodePingInfo(group_key, node_ps, ping)
-                ping_results.append(info)
-
-        ping_results.sort()
-        best_nodes = ping_results[:5]
-        random.shuffle(best_nodes)
-        best_node = best_nodes[0]
-
-        node_index = cls.node_manager.find_node_index(best_node.group_key, best_node.node_ps)
-        cls.apply_node(best_node.group_key, node_index, restart_auto_detect=False)
-
-        detect.last_switch_time = '{0} ---- {1}'.format(datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'), best_node.node_ps)
-        cls.user_config.save()
+            print(ping_groups)
+            ping_results = []
+            for group in ping_groups:
+                group_key = group[K.subscribe]
+                nodes = group[K.nodes]
+                for node_ps in nodes.keys():
+                    ping = nodes[node_ps]
+                    info = NodePingInfo(group_key, node_ps, ping)
+                    if ping > 0:
+                        ping_results.append(info)
+            
+            ping_results.sort()
+            if len(ping_results) > 0:
+                best_node = ping_results[0]
+                node_index = cls.node_manager.find_node_index(best_node.group_key, best_node.node_ps)
+                cls.apply_node(best_node.group_key, node_index, restart_auto_detect=False)
+                detect.last_switch_time = '{0} ---- {1}'.format(datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'), best_node.node_ps)
+                cls.user_config.save()
+    

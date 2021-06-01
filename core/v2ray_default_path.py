@@ -18,7 +18,7 @@ class V2rayDefaultPath:
 
     @classmethod
     def config_file(cls) -> str:
-        if sys.platform == 'darwin':
+        # if sys.platform == 'darwin':
             return '/usr/local/etc/v2ray/config.json'
-        else:
-            return '/etc/v2ray/config.json'
+        # else:
+        #     return '/etc/v2ray/config.json'

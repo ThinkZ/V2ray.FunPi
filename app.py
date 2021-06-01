@@ -14,7 +14,7 @@ CoreService.load()
 app = Flask(__name__, static_url_path='/static')
 app.config['BASIC_AUTH_USERNAME'] = CoreService.app_config.user
 app.config['BASIC_AUTH_PASSWORD'] = CoreService.app_config.password
-app.config['BASIC_AUTH_FORCE'] = True
+app.config['BASIC_AUTH_FORCE'] = False
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.jinja_env.auto_reload = True
 basic_auth = BasicAuth(app)

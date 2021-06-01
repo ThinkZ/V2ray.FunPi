@@ -53,7 +53,7 @@ class V2rayController:
         return version
 
     def update(self) -> bool:
-        update_log = subprocess.check_output("bash ./script/update_v2ray.sh", shell=True).decode('utf-8')
+        update_log = subprocess.check_output("bash ./script/install-release.sh", shell=True).decode('utf-8')
         ret = update_log.find('installed')
         if ret:
             ret = self.restart()
@@ -85,7 +85,7 @@ class V2rayController:
 
     def enable_iptables(self):
         subprocess.check_output("bash ./script/config_iptable.sh", shell=True)
-        subprocess.check_output("systemctl enable v2ray_iptable.service", shell=True)
+        subprocess.check_output("systemctl enable v2iptable.service", shell=True)
 
 class DockerV2rayController(V2rayController):
     def start(self) -> bool:

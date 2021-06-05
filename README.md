@@ -5,22 +5,12 @@
 一个基于 Web 的 V2ray 控制面板，已改造为将树莓派作为旁路由使用，只需要设置好网关，即可代理路由器下所有设备透明翻墙，支持直连\智能分流\全局代理 三种模式，并能自动管理订阅，原理参考 [透明代理(TPROXY)
 ](https://guide.v2fly.org/app/tproxy.html)，TG讨论组:[https://t.me/v2ray_funpi](https://t.me/v2ray_funpi)
 
-![1.png](pic/1.png)  
-
-![2.png](pic/2.png)  
-
-![3.png](pic/3.png)  
-
-![4.png](pic/4.png)  
-
-![5.png](pic/5.png)  
 
 ## 系统支持
 MacOS  
 Debian Buster  
 Raspberry Pi OS (based on Debian Buster)  
 Armbian (based on Debian Buster)
-
 
 ## 硬件支持
 Mac  
@@ -29,9 +19,6 @@ Raspberry Pi 4B
 斐讯 N1  
 其他任何运行 Debian Buster 的arm、x86、x64 主机/虚拟机/Docker镜像 
 
-![zeropi_1.jpg](pic/zeropi_1.jpg)  
-
-![zeropi_2.jpg](pic/zeropi_2.jpg)  
 
 ## 安装方式
 ### Mac
@@ -86,7 +73,6 @@ sudo reboot
 ```
 
 然后设置路由器的DHCP网关为 192.168.66.200
-![router.png](pic/router.png)
 
 配置完成，浏览器输入192.168.66.200:1086，即可访问面板
 

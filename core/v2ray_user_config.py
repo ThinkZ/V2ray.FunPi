@@ -62,7 +62,7 @@ class V2RayUserConfig(BaseDataItem):
             def __init__(self):
                 self.enabled = True
                 self.detect_span = 60
-                self.detect_url = 'https://google.com/'
+                self.detect_url = 'https://google.com/generate_204'
                 self.failed_count = 3
                 self.timeout = 5
                 self.last_switch_time = ''

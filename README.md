@@ -18,10 +18,10 @@
 ## 系统支持
 MacOS  
 Debian Buster  
-Ubuntu
-CentOS
+Ubuntu 
+CentOS 
 Raspberry Pi OS (based on Debian Buster)  
-Armbian (based on Debian Buster)
+Armbian (based on Debian Buster) 
 
 ## 硬件支持
 Mac  

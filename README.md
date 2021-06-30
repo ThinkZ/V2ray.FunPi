@@ -18,16 +18,17 @@
 ## 系统支持
 MacOS  
 Debian Buster  
+Ubuntu
+CentOS
 Raspberry Pi OS (based on Debian Buster)  
 Armbian (based on Debian Buster)
-
 
 ## 硬件支持
 Mac  
 Raspberry Pi 4B  
 [ZeroPi](http://wiki.friendlyarm.com/wiki/index.php/ZeroPi)  
 斐讯 N1  
-其他任何运行 Debian Buster 的arm、x86、x64 主机/虚拟机/Docker镜像 
+其他任何运行 Debian Buster 的arm、x86、x64 物理主机/软路由/电视盒子/广告开发板/虚拟机/Docker镜像 
 
 ![zeropi_1.jpg](pic/zeropi_1.jpg)  
 
@@ -54,13 +55,13 @@ python3 app.py
 浏览器输入127.0.0.1:1086，即可访问面板  
 浏览器设置 socks5 代理 127.0.0.1:1080，即可使用，Chrome 浏览器推荐使用 SwitchyOmega  
 
-### Debian Buster / ubuntu
+### Debian Buster / Ubuntu / CentOS
 ```
 sudo su - root
 cd /usr/local
 git clone https://github.com/twotreesus/V2ray.FunPi.git V2ray.Fun
 cd V2ray.Fun/script
-./install.sh #如果是centos 请执行  ./install_centos.sh
+./install.sh #如果是 CentOS 请执行  ./install_centos.sh
 ```
 
 重启服务

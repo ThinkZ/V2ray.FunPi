@@ -54,13 +54,13 @@ python3 app.py
 浏览器输入127.0.0.1:1086，即可访问面板  
 浏览器设置 socks5 代理 127.0.0.1:1080，即可使用，Chrome 浏览器推荐使用 SwitchyOmega  
 
-### Debian Buster
+### Debian Buster / ubuntu
 ```
 sudo su - root
 cd /usr/local
 git clone https://github.com/twotreesus/V2ray.FunPi.git V2ray.Fun
 cd V2ray.Fun/script
-./install.sh
+./install.sh #如果是centos 请执行  ./install_centos.sh
 ```
 
 重启服务
